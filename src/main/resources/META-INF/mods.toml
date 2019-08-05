@@ -20,7 +20,7 @@ displayName="SaveTools" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 #updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="http://teamfruit.net/" #optional
+displayURL="https://www.teamfruit.net/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 logoFile="savetools.png" #optional
 # A text field displayed in the mod UI
@@ -29,7 +29,7 @@ logoFile="savetools.png" #optional
 authors="sjcl" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-This mod is protect your preciousfully tools/weapons from breaking via over use!!
+This mod protects your preciousfully tools/weapons from breaking via over use!!
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.savetools]] #optional
