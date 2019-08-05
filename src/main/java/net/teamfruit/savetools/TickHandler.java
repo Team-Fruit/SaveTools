@@ -7,6 +7,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -48,7 +52,6 @@ public class TickHandler {
 			if (swapSlot<0&&!slot.getStack().isDamageable())
 				swapSlot = slot.getSlotIndex();
 
-			SaveTools.LOGGER.info("Index:{} ID:{} Item:{} HasStack:{}", i, slot.getSlotIndex(), slot.getStack(), slot.getHasStack());
 			if (!slot.getHasStack()) {
 				click(con, serverToolSlotId);
 				click(con, toServerSlotId(slot.getSlotIndex()));
@@ -66,6 +69,8 @@ public class TickHandler {
 		click(con, toServerSlotId(swapSlot));
 		click(con, serverToolSlotId);
 
+		final ITextComponent text = new TextComponentString("SAVED").setStyle(new Style().setColor(TextFormatting.AQUA));
+		Minecraft.getInstance().player.sendMessage(text);
 	}
 
 	private Container getInventoryContainer() {
