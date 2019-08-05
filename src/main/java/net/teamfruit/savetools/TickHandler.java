@@ -7,9 +7,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -24,14 +23,13 @@ public class TickHandler {
 	@SubscribeEvent
 	public void onTick(final TickEvent event) {
 		final Minecraft mc = Minecraft.getInstance();
-		if (mc.gameSettings.keyBindAttack.isKeyDown()&&mc.objectMouseOver.type!=RayTraceResult.Type.MISS&&!mc.player.isCreative()) {
+		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!mc.player.isCreative()&&mc.objectMouseOver.type!=RayTraceResult.Type.MISS) {
 			final ItemStack item = Minecraft.getInstance().player.getHeldItemMainhand();
 			if (item.isDamaged()) {
 				final int remaiming = item.getMaxDamage()-item.getDamage();
 				if (remaiming<=2) {
 					saveTool();
-					final ITextComponent text = new TextComponentString("SAVED").setStyle(new Style().setColor(TextFormatting.AQUA));
-					Minecraft.getInstance().player.sendMessage(text);
+					ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 				}
 			}
 		}
@@ -41,7 +39,6 @@ public class TickHandler {
 		final Container con = getInventoryContainer();
 		final int toolSlotId = Minecraft.getInstance().player.inventory.currentItem;
 
-		// Mismatched slot ID with server (hotbar)
 		final int serverToolSlotId = toServerSlotId(toolSlotId);
 
 		// Bug? Conflict between the crafting slot and hot bar slot index.
@@ -64,7 +61,7 @@ public class TickHandler {
 			}
 		}
 
-		// If anything other than the hot bar is filled
+		// If anything other than hot bar is filled
 
 		if (swapSlot<0)
 			// Last slot
