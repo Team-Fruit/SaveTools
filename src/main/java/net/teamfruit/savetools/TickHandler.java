@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class TickHandler {
 
 	@SubscribeEvent
-	public void onInput(final TickEvent event) {
+	public void onTick(final TickEvent event) {
 		final Minecraft mc = Minecraft.getInstance();
 		if (mc.gameSettings.keyBindAttack.isKeyDown()&&mc.objectMouseOver.type!=RayTraceResult.Type.MISS&&!mc.player.isCreative()) {
 			final ItemStack item = Minecraft.getInstance().player.getHeldItemMainhand();
@@ -39,7 +39,7 @@ public class TickHandler {
 		// Mismatched slot ID with server (hotbar)
 		final int serverToolSlotId = toServerSlotId(toolSlotId);
 
-		// Bug? Conflict between the crafting slot and the hot bar slot index.
+		// Bug? Conflict between the crafting slot and hot bar slot index.
 		int i = 0;
 		int swapSlot = -1;
 		for (final Slot slot : con.inventorySlots) {
@@ -48,9 +48,6 @@ public class TickHandler {
 			// 1-5 Crafting Slot, 6-9 Armor Slot
 			if (i<=9)
 				continue;
-
-			final boolean hotbar = slot.getSlotIndex()<=8;
-			final boolean offhand = slot.getSlotIndex()==40;
 
 			if (swapSlot<0&&!slot.getStack().isDamageable())
 				swapSlot = slot.getSlotIndex();
