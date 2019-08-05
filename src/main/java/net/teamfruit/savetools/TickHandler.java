@@ -23,8 +23,11 @@ public class TickHandler {
 			final ItemStack item = Minecraft.getInstance().player.getHeldItemMainhand();
 			if (item.isDamaged()) {
 				final int remaiming = item.getMaxDamage()-item.getDamage();
-				if (remaiming<=2)
+				if (remaiming<=2) {
 					saveTool();
+					final ITextComponent text = new TextComponentString("SAVED").setStyle(new Style().setColor(TextFormatting.AQUA));
+					Minecraft.getInstance().player.sendMessage(text);
+				}
 			}
 		}
 	}
@@ -68,9 +71,6 @@ public class TickHandler {
 		click(con, serverToolSlotId);
 		click(con, toServerSlotId(swapSlot));
 		click(con, serverToolSlotId);
-
-		final ITextComponent text = new TextComponentString("SAVED").setStyle(new Style().setColor(TextFormatting.AQUA));
-		Minecraft.getInstance().player.sendMessage(text);
 	}
 
 	private Container getInventoryContainer() {
