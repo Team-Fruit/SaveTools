@@ -30,7 +30,7 @@ public class TickHandler {
 		final int toolSlotId = Minecraft.getInstance().player.inventory.currentItem;
 
 		// Mismatched slot ID with server (hotbar)
-		final int serverToolSlotId = toolSlotId+36;
+		final int serverToolSlotId = toServerSlotId(toolSlotId);
 
 		// Bug? Conflict between the crafting slot and the hot bar slot index.
 		int i = 0;
@@ -42,9 +42,8 @@ public class TickHandler {
 			if (i<=9)
 				continue;
 
-			// Hotbar and offhand
-			if (slot.getSlotIndex()<=8||slot.getSlotIndex()==40)
-				break;
+			final boolean hotbar = slot.getSlotIndex()<=8;
+			final boolean offhand = slot.getSlotIndex()==40;
 
 			if (swapSlot<0&&!slot.getStack().isDamageable())
 				swapSlot = slot.getSlotIndex();
@@ -52,7 +51,7 @@ public class TickHandler {
 			SaveTools.LOGGER.info("Index:{} ID:{} Item:{} HasStack:{}", i, slot.getSlotIndex(), slot.getStack(), slot.getHasStack());
 			if (!slot.getHasStack()) {
 				click(con, serverToolSlotId);
-				click(con, slot.getSlotIndex());
+				click(con, toServerSlotId(slot.getSlotIndex()));
 				return;
 			}
 		}
@@ -64,7 +63,7 @@ public class TickHandler {
 			swapSlot = 35;
 
 		click(con, serverToolSlotId);
-		click(con, swapSlot);
+		click(con, toServerSlotId(swapSlot));
 		click(con, serverToolSlotId);
 
 	}
@@ -79,6 +78,17 @@ public class TickHandler {
 
 	private void click(final Container container, final int slotId) {
 		Minecraft.getInstance().playerController.windowClick(container.windowId, slotId, 0, ClickType.PICKUP, Minecraft.getInstance().player);
+	}
+
+	// Mismatched slot ID with server
+	private int toServerSlotId(final int clientSlotId) {
+		// Hotbar
+		if (clientSlotId<=8)
+			return clientSlotId+36;
+		// Offhand
+		if (clientSlotId==40)
+			return 45;
+		return clientSlotId;
 	}
 
 }
