@@ -16,6 +16,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class TickHandler {
 
+	public static final TickHandler INSTANCE = new TickHandler();
+
+	private TickHandler() {
+	}
+
 	@SubscribeEvent
 	public void onTick(final TickEvent event) {
 		final Minecraft mc = Minecraft.getInstance();
