@@ -12,7 +12,7 @@ public class SaveTools {
 	public static final Logger LOGGER = LogManager.getLogger();
 
 	public SaveTools() {
-		MinecraftForge.EVENT_BUS.register(new InputHandler());
+		MinecraftForge.EVENT_BUS.register(new TickHandler());
 	}
 
 }

@@ -10,7 +10,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class InputHandler {
+public class TickHandler {
 
 	@SubscribeEvent
 	public void onInput(final TickEvent event) {
