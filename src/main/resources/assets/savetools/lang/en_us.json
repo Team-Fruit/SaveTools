@@ -1,0 +1,8 @@
+{
+  "savetools.key.category": "SaveTools",
+  "savetools.key.toggle": "Toggle Auto Tool Save",
+  "savetools.message.savetools": "SaveTools",
+  "savetools.message.enabled": "Enabled",
+  "savetools.message.disabled": "Disabled",
+  "savetools.message.saved": "SAVED!"
+}
