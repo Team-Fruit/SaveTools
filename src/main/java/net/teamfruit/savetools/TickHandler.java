@@ -29,8 +29,12 @@ public class TickHandler {
 		final Container con = getInventoryContainer();
 		final int toolSlotId = Minecraft.getInstance().player.inventory.currentItem;
 
+		// Mismatched slot ID with server (hotbar)
+		final int serverToolSlotId = toolSlotId+36;
+
 		// Bug? Conflict between the crafting slot and the hot bar slot index.
 		int i = 0;
+		int swapSlot = -1;
 		for (final Slot slot : con.inventorySlots) {
 			i++;
 
@@ -42,17 +46,27 @@ public class TickHandler {
 			if (slot.getSlotIndex()<=8||slot.getSlotIndex()==40)
 				break;
 
+			if (swapSlot<0&&!slot.getStack().isDamageable())
+				swapSlot = slot.getSlotIndex();
+
 			SaveTools.LOGGER.info("Index:{} ID:{} Item:{} HasStack:{}", i, slot.getSlotIndex(), slot.getStack(), slot.getHasStack());
 			if (!slot.getHasStack()) {
-				// Mismatched slot ID with server (hotbar)
-				final int slotId = toolSlotId+36;
-				click(con, slotId);
+				click(con, serverToolSlotId);
 				click(con, slot.getSlotIndex());
 				return;
 			}
 		}
 
-		// TODO: If anything other than the hot bar is filled
+		// If anything other than the hot bar is filled
+
+		if (swapSlot<0)
+			// Last slot
+			swapSlot = 35;
+
+		click(con, serverToolSlotId);
+		click(con, swapSlot);
+		click(con, serverToolSlotId);
+
 	}
 
 	private Container getInventoryContainer() {
