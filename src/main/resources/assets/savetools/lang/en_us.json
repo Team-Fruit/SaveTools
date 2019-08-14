@@ -2,7 +2,9 @@
   "savetools.key.category": "SaveTools",
   "savetools.key.toggle": "Toggle Auto Tool Save",
   "savetools.message.savetools": "SaveTools",
-  "savetools.message.enabled": "Enabled",
-  "savetools.message.disabled": "Disabled",
+  "savetools.message.enabled.manually": "Enabled",
+  "savetools.message.enabled.auto": "Auto Enabled",
+  "savetools.message.disabled.while": "Disabled (Until manually enabled)",
+  "savetools.message.disabled.temporary": "Temporarily Disabled (Press Shift to Disabled until manually enabled)",
   "savetools.message.saved": "SAVED!"
 }
