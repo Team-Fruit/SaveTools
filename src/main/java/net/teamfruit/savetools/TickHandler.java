@@ -6,6 +6,7 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -17,23 +18,23 @@ public class TickHandler {
 
 	public static final TickHandler INSTANCE = new TickHandler();
 
-	private boolean saving = false;
-
 	private TickHandler() {
 	}
 
 	@SubscribeEvent
 	public void onTick(final TickEvent event) {
+		InputHandler.INSTANCE.onTick();
+
 		final Minecraft mc = Minecraft.getInstance();
-		if (!this.saving&&InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!mc.player.isCreative()&&mc.objectMouseOver.type!=RayTraceResult.Type.MISS) {
+		final RayTraceResult rayTrace = mc.objectMouseOver;
+		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!mc.player.isCreative()&&rayTrace.type!=RayTraceResult.Type.MISS) {
 			final ItemStack item = Minecraft.getInstance().player.getHeldItemMainhand();
-			if (item.isDamaged()) {
+			final BlockPos pos = rayTrace.getBlockPos();
+			if (item.isDamaged()&&(rayTrace.type==RayTraceResult.Type.ENTITY||mc.world.getBlockState(pos).getBlockHardness(mc.world, pos)!=0.0f)) {
 				final int remaiming = item.getMaxDamage()-item.getDamage();
 				if (remaiming<=item.getMaxDamage()/100f||remaiming<=2) {
-					this.saving = true;
 					saveTool();
 					ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
-					this.saving = false;
 				}
 			}
 		}
