@@ -42,7 +42,7 @@ public class InputHandler {
 
 		final EntityPlayerSP player = Minecraft.getInstance().player;
 		if (this.slot!=player.inventory.currentItem||!ItemStack.areItemsEqualIgnoreDurability(this.item, player.getHeldItemMainhand()))
-			enable();
+			enableAuto();
 	}
 
 	public boolean isEnabled() {
@@ -51,7 +51,12 @@ public class InputHandler {
 
 	public void enable() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.enabled").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+	}
+
+	private void enableAuto() {
+		this.enabled = true;
+		ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	public void disable(final boolean autoEnable) {
