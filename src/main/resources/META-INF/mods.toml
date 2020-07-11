@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[25,)"
+loaderVersion="[31,)"
 issueTrackerURL="https://github.com/Team-Fruit/SaveTools/issues"
 
 [[mods]]
@@ -7,22 +7,21 @@ modId="savetools"
 version="${file.jarVersion}"
 displayName="SaveTools"
 displayURL="https://www.teamfruit.net/"
-logoFile="savetools.png"
 authors="sjcl"
 description='''
 This mod protects your preciousfully tools/weapons from breaking via over use!!
 '''
 
-[[dependencies.savetools]]
+[[dependencies.savetools]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[25.0.210,)"
+    versionRange="[31,)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.savetools]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.13.2]"
+    versionRange="[1.15.2]"
     ordering="NONE"
     side="CLIENT"

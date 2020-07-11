@@ -3,12 +3,12 @@ package net.teamfruit.savetools;
 import org.lwjgl.glfw.GLFW;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -40,8 +40,8 @@ public class InputHandler {
 		if (Minecraft.getInstance().player==null||isEnabled()||!this.autoEnable)
 			return;
 
-		final EntityPlayerSP player = Minecraft.getInstance().player;
-		if (this.slot!=player.inventory.currentItem||!ItemStack.areItemsEqualIgnoreDurability(this.item, player.getHeldItemMainhand()))
+		final ClientPlayerEntity player = Minecraft.getInstance().player;
+		if (player!=null&&(this.slot!=player.inventory.currentItem||!ItemStack.areItemsEqualIgnoreDurability(this.item, player.getHeldItemMainhand())))
 			enableAuto();
 	}
 
@@ -51,30 +51,31 @@ public class InputHandler {
 
 	public void enable() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	private void enableAuto() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	public void disable(final boolean autoEnable) {
 		this.enabled = false;
 
-		if (autoEnable) {
+		final ClientPlayerEntity player = Minecraft.getInstance().player;
+		if (autoEnable&&player!=null) {
 			this.autoEnable = true;
-			this.slot = Minecraft.getInstance().player.inventory.currentItem;
-			this.item = Minecraft.getInstance().player.getHeldItemMainhand();
-			ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.disabled.temporary").setStyle(new Style().setColor(TextFormatting.RED)));
+			this.slot = player.inventory.currentItem;
+			this.item = player.getHeldItemMainhand();
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.disabled.temporary").setStyle(new Style().setColor(TextFormatting.RED)));
 		} else {
 			this.autoEnable = false;
-			ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.disabled.while").setStyle(new Style().setColor(TextFormatting.RED)));
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.disabled.while").setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 
 	public boolean isShiftPressed() {
-		final long handle = Minecraft.getInstance().mainWindow.getHandle();
+		final long handle = Minecraft.getInstance().getMainWindow().getHandle();
 		return GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_LEFT_SHIFT)==GLFW.GLFW_PRESS||GLFW.glfwGetKey(handle, GLFW.GLFW_KEY_RIGHT_SHIFT)==GLFW.GLFW_PRESS;
 	}
 }

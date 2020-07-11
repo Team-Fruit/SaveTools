@@ -1,18 +1,22 @@
 package net.teamfruit.savetools;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
+import net.minecraft.client.multiplayer.PlayerController;
+import net.minecraft.inventory.container.ClickType;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class TickHandler {
 
@@ -22,27 +26,40 @@ public class TickHandler {
 	}
 
 	@SubscribeEvent
-	public void onTick(final TickEvent event) {
+	public void onTick(final TickEvent.ClientTickEvent event) {
 		InputHandler.INSTANCE.onTick();
 
 		final Minecraft mc = Minecraft.getInstance();
+		final ClientPlayerEntity player = mc.player;
+		final World world = mc.world;
 		final RayTraceResult rayTrace = mc.objectMouseOver;
-		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!mc.player.isCreative()&&rayTrace.type!=RayTraceResult.Type.MISS) {
-			final ItemStack item = Minecraft.getInstance().player.getHeldItemMainhand();
-			final BlockPos pos = rayTrace.getBlockPos();
-			if (item.isDamaged()&&(rayTrace.type==RayTraceResult.Type.ENTITY||mc.world.getBlockState(pos).getBlockHardness(mc.world, pos)!=0.0f)) {
+
+		if (player==null||world==null||rayTrace==null)
+			return;
+
+		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS) {
+			final ItemStack item = player.getHeldItemMainhand();
+			final Vec3d vec3d = rayTrace.getHitVec();
+			//			if (vec3d.getY()==Math.floor(vec3d.getY()))
+			//				vec3d = vec3d.subtract(0, 1, 0);
+			final BlockPos pos = new BlockPos(vec3d);
+			if (item.isDamaged()&&(rayTrace.getType()==RayTraceResult.Type.ENTITY||world.getBlockState(pos).getBlockHardness(world, pos)!=0.0f)) {
 				final int remaiming = item.getMaxDamage()-item.getDamage();
 				if (remaiming<=item.getMaxDamage()/100f||remaiming<=2) {
 					saveTool();
-					ChatUtil.saveToolsMessage(new TextComponentTranslation("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+					ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 				}
 			}
 		}
 	}
 
 	public void saveTool() {
-		final Container con = getInventoryContainer();
-		final int toolSlotId = Minecraft.getInstance().player.inventory.currentItem;
+		final ClientPlayerEntity player = Minecraft.getInstance().player;
+		if (player==null)
+			return;
+
+		final Container con = getInventoryContainer(player);
+		final int toolSlotId = player.inventory.currentItem;
 
 		final int serverToolSlotId = toServerSlotId(toolSlotId);
 
@@ -77,16 +94,18 @@ public class TickHandler {
 		click(con, serverToolSlotId);
 	}
 
-	private Container getInventoryContainer() {
+	private Container getInventoryContainer(final ClientPlayerEntity player) {
 		final Minecraft mc = Minecraft.getInstance();
-		if (mc.currentScreen!=null&&mc.currentScreen instanceof GuiContainer)
-			return ((GuiContainer) mc.currentScreen).inventorySlots;
+		if (mc.currentScreen!=null&&mc.currentScreen instanceof ContainerScreen)
+			return ((ContainerScreen<?>) mc.currentScreen).getContainer();
 		else
-			return mc.player.inventoryContainer;
+			return player.container;
 	}
 
 	private void click(final Container container, final int slotId) {
-		Minecraft.getInstance().playerController.windowClick(container.windowId, slotId, 0, ClickType.PICKUP, Minecraft.getInstance().player);
+		final PlayerController playerController = Minecraft.getInstance().playerController;
+		if (playerController!=null)
+			playerController.windowClick(container.windowId, slotId, 0, ClickType.PICKUP, Minecraft.getInstance().player);
 	}
 
 	// Mismatched slot ID with server
