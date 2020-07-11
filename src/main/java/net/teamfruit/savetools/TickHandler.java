@@ -9,8 +9,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,12 +37,9 @@ public class TickHandler {
 		if (player==null||world==null||rayTrace==null)
 			return;
 
-		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS) {
+		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS&&rayTrace instanceof BlockRayTraceResult) {
 			final ItemStack item = player.getHeldItemMainhand();
-			final Vec3d vec3d = rayTrace.getHitVec();
-			//			if (vec3d.getY()==Math.floor(vec3d.getY()))
-			//				vec3d = vec3d.subtract(0, 1, 0);
-			final BlockPos pos = new BlockPos(vec3d);
+			final BlockPos pos = ((BlockRayTraceResult) rayTrace).getPos();
 			if (item.isDamaged()&&(rayTrace.getType()==RayTraceResult.Type.ENTITY||world.getBlockState(pos).getBlockHardness(world, pos)!=0.0f)) {
 				final int remaiming = item.getMaxDamage()-item.getDamage();
 				if (remaiming<=item.getMaxDamage()/100f||remaiming<=2) {
