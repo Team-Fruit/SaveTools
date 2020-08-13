@@ -27,7 +27,13 @@ public class TickHandler {
 
 	@SubscribeEvent
 	public void onTick(final TickEvent.ClientTickEvent event) {
+		if (event.phase!=TickEvent.Phase.START)
+			return;
+
 		InputHandler.INSTANCE.onTick();
+
+		if (!InputHandler.INSTANCE.isEnabled())
+			return;
 
 		final Minecraft mc = Minecraft.getInstance();
 		final ClientPlayerEntity player = mc.player;
@@ -37,7 +43,7 @@ public class TickHandler {
 		if (player==null||world==null||rayTrace==null)
 			return;
 
-		if (InputHandler.INSTANCE.isEnabled()&&mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS&&rayTrace instanceof BlockRayTraceResult) {
+		if (mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS&&rayTrace instanceof BlockRayTraceResult) {
 			final ItemStack item = player.getHeldItemMainhand();
 			final BlockPos pos = ((BlockRayTraceResult) rayTrace).getPos();
 			if (item.isDamaged()&&(rayTrace.getType()==RayTraceResult.Type.ENTITY||world.getBlockState(pos).getBlockHardness(world, pos)!=0.0f)) {
