@@ -37,23 +37,44 @@ public class TickHandler {
 
 		final Minecraft mc = Minecraft.getInstance();
 		final ClientPlayerEntity player = mc.player;
-		final World world = mc.world;
-		final RayTraceResult rayTrace = mc.objectMouseOver;
 
-		if (player==null||world==null||rayTrace==null)
+		if (player==null||player.isCreative())
 			return;
 
-		if (mc.gameSettings.keyBindAttack.isKeyDown()&&!player.isCreative()&&rayTrace.getType()!=RayTraceResult.Type.MISS&&rayTrace instanceof BlockRayTraceResult) {
-			final ItemStack item = player.getHeldItemMainhand();
-			final BlockPos pos = ((BlockRayTraceResult) rayTrace).getPos();
-			if (item.isDamaged()&&(rayTrace.getType()==RayTraceResult.Type.ENTITY||world.getBlockState(pos).getBlockHardness(world, pos)!=0.0f)) {
-				final int remaiming = item.getMaxDamage()-item.getDamage();
-				if (remaiming<=item.getMaxDamage()/100f||remaiming<=2) {
+		final boolean attack = mc.gameSettings.keyBindAttack.isKeyDown();
+		final boolean use = mc.gameSettings.keyBindUseItem.isKeyDown();
+
+		if (!attack&&!use)
+			return;
+
+		final ItemStack item = player.getHeldItemMainhand();
+
+		if (!item.isDamageable())
+			return;
+
+		final int remaiming = item.getMaxDamage()-item.getDamage();
+		final boolean save = remaiming<=item.getMaxDamage()/100f||remaiming<=2;
+
+		if (!save)
+			return;
+
+		if (attack) {
+			final RayTraceResult rayTrace = mc.objectMouseOver;
+
+			if (rayTrace!=null&&rayTrace.getType()!=RayTraceResult.Type.MISS)
+				if (rayTrace instanceof BlockRayTraceResult) {
+					final World world = mc.world;
+					if (world!=null) {
+						final BlockPos pos = ((BlockRayTraceResult) rayTrace).getPos();
+						if (world.getBlockState(pos).getBlockHardness(world, pos)!=0.0f)
+							saveTool();
+					}
+				} else
 					saveTool();
-					ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
-				}
-			}
 		}
+
+		if (use)
+			saveTool();
 	}
 
 	public void saveTool() {
@@ -66,7 +87,7 @@ public class TickHandler {
 
 		final int serverToolSlotId = toServerSlotId(toolSlotId);
 
-		// Bug? Conflict between the crafting slot and hot bar slot index.
+		// Conflict between the crafting slot and hot bar slot index.
 		int i = 0;
 		int swapSlot = -1;
 		for (final Slot slot : con.inventorySlots) {
@@ -82,6 +103,8 @@ public class TickHandler {
 			if (!slot.getHasStack()) {
 				click(con, serverToolSlotId);
 				click(con, toServerSlotId(slot.getSlotIndex()));
+
+				sendSaveMessage();
 				return;
 			}
 		}
@@ -95,6 +118,8 @@ public class TickHandler {
 		click(con, serverToolSlotId);
 		click(con, toServerSlotId(swapSlot));
 		click(con, serverToolSlotId);
+
+		sendSaveMessage();
 	}
 
 	private Container getInventoryContainer(final ClientPlayerEntity player) {
@@ -120,6 +145,10 @@ public class TickHandler {
 		if (clientSlotId==40)
 			return 45;
 		return clientSlotId;
+	}
+
+	private void sendSaveMessage() {
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 }
