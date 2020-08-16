@@ -61,8 +61,8 @@ public class TickHandler {
 		if (player==null||player.isCreative())
 			return;
 
-		final boolean attack = mc.gameSettings.keyBindAttack.isKeyDown();
-		final boolean use = mc.gameSettings.keyBindUseItem.isKeyDown();
+		final boolean attack = mc.gameSettings.keyBindAttack.isKeyDown()&&Config.INSTANCE.general.attack.get();
+		final boolean use = mc.gameSettings.keyBindUseItem.isKeyDown()&&Config.INSTANCE.general.use.get();
 
 		if (!attack&&!use)
 			return;
@@ -70,6 +70,9 @@ public class TickHandler {
 		final ItemStack item = player.getHeldItemMainhand();
 
 		if (!item.isDamageable())
+			return;
+
+		if (Config.INSTANCE.general.onlyEnchanted.get()&&!item.isEnchanted())
 			return;
 
 		final int remaiming = item.getMaxDamage()-item.getDamage();

@@ -9,5 +9,8 @@
   "savetools.message.disabled.temporary": "一時的に無効 (Shiftと同時に押すと手動で有効化するまで無効)",
   "savetools.message.saved": "ツールは救出されました！",
   "savetools.config.title": "SaveTools 設定",
-  "savetools.config.interval.title": "Tick間隔"
+  "savetools.config.interval.title": "Tick間隔",
+  "savetools.config.attack.title": "攻撃/破壊動作で救出",
+  "savetools.config.use.title": "使用/設置動作で救出",
+  "savetools.config.onlyenchanted.title": "エンチャントされたものだけ"
 }
