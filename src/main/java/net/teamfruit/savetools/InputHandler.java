@@ -17,6 +17,7 @@ public class InputHandler {
 	public static final InputHandler INSTANCE = new InputHandler();
 
 	public static final KeyBinding KEY_TOGGLE = new KeyBinding("savetools.key.toggle", GLFW.GLFW_KEY_B, "savetools.key.category");
+	public static final KeyBinding KEY_CONFIG = new KeyBinding("savetools.key.config", GLFW.GLFW_KEY_UNKNOWN, "savetools.key.category");
 
 	private boolean enabled = true;
 	private boolean autoEnable = true;
@@ -31,6 +32,9 @@ public class InputHandler {
 				disable(!isShiftPressed());
 			else
 				enable();
+
+		if (KEY_CONFIG.isPressed())
+			Minecraft.getInstance().displayGuiScreen(Config.INSTANCE.buildClothConfig(Minecraft.getInstance().currentScreen));
 	}
 
 	private int slot = -1;
