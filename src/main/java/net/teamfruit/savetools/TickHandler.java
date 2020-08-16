@@ -25,6 +25,23 @@ public class TickHandler {
 	private TickHandler() {
 	}
 
+	private int tickCount = 0;
+
+	private boolean tickInterval() {
+		final int interval = Config.INSTANCE.general.interval.get();
+		if (interval<=0)
+			return true;
+
+		if (this.tickCount==interval) {
+			this.tickCount = 0;
+			return true;
+		}
+
+		this.tickCount++;
+
+		return false;
+	}
+
 	@SubscribeEvent
 	public void onTick(final TickEvent.ClientTickEvent event) {
 		if (event.phase!=TickEvent.Phase.START)
@@ -33,6 +50,9 @@ public class TickHandler {
 		InputHandler.INSTANCE.onTick();
 
 		if (!InputHandler.INSTANCE.isEnabled())
+			return;
+
+		if (!tickInterval())
 			return;
 
 		final Minecraft mc = Minecraft.getInstance();
