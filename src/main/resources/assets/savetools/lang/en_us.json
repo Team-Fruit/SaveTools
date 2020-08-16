@@ -1,10 +1,13 @@
 {
   "savetools.key.category": "SaveTools",
   "savetools.key.toggle": "Toggle Auto Tool Save",
+  "savetools.key.config": "Open Config GUI",
   "savetools.message.savetools": "SaveTools",
   "savetools.message.enabled.manually": "Enabled",
   "savetools.message.enabled.auto": "Auto Enabled",
   "savetools.message.disabled.while": "Disabled (Until manually enabled)",
   "savetools.message.disabled.temporary": "Temporarily Disabled (Press with Shift to Disabled until manually enabled)",
-  "savetools.message.saved": "SAVED!"
+  "savetools.message.saved": "SAVED!",
+  "savetools.config.title": "SaveTools Configuration",
+  "savetools.config.interval.title": "Tick Interval"
 }
