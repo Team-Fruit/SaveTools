@@ -1,5 +1,7 @@
 package net.teamfruit.savetools;
 
+import java.util.Optional;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
@@ -8,6 +10,7 @@ import net.minecraft.inventory.container.ClickType;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -80,6 +83,18 @@ public class TickHandler {
 
 		if (!save)
 			return;
+
+		if (Config.INSTANCE.advanced.enableListFiler.get()) {
+			final String name = Optional.ofNullable(item.getItem().getRegistryName())
+					.map(ResourceLocation::toString)
+					.orElseGet(() -> item.getItem().toString());
+
+			if (Config.INSTANCE.advanced.whitelistMode.get()) {
+				if (Config.INSTANCE.advanced.list.get().stream().noneMatch(name::equals))
+					return;
+			} else if (Config.INSTANCE.advanced.list.get().stream().anyMatch(name::equals))
+				return;
+		}
 
 		if (attack) {
 			final RayTraceResult rayTrace = mc.objectMouseOver;

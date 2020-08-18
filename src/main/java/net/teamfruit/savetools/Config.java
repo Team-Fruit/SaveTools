@@ -1,14 +1,20 @@
 package net.teamfruit.savetools;
 
+import java.util.Arrays;
+import java.util.List;
+
 import me.shedaniel.forge.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.forge.clothconfig2.api.ConfigCategory;
 import me.shedaniel.forge.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.forge.clothconfig2.api.Modifier;
 import me.shedaniel.forge.clothconfig2.api.ModifierKeyCode;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class Config {
 
@@ -16,18 +22,20 @@ public class Config {
 
 	public final ForgeConfigSpec config;
 	public final General general;
+	public final Advanced advanced;
 
 	private Config() {
 		final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		this.general = new General(builder);
+		this.advanced = new Advanced(builder);
 		this.config = builder.build();
 	}
 
 	public static class General {
-		public final ConfigValue<Integer> interval;
-		public final ConfigValue<Boolean> attack;
-		public final ConfigValue<Boolean> use;
-		public final ConfigValue<Boolean> onlyEnchanted;
+		public final IntValue interval;
+		public final BooleanValue attack;
+		public final BooleanValue use;
+		public final BooleanValue onlyEnchanted;
 
 		public General(final ForgeConfigSpec.Builder builder) {
 			builder.push("General");
@@ -46,11 +54,40 @@ public class Config {
 		}
 	}
 
+	public static class Advanced {
+		public final BooleanValue enableListFiler;
+		public final BooleanValue whitelistMode;
+		public final ConfigValue<List<String>> list;
+
+		public Advanced(final ForgeConfigSpec.Builder builder) {
+			builder.push("Advanced");
+
+			this.enableListFiler = builder.comment("Enable list filter")
+					.define("enablelistfiler", false);
+			this.whitelistMode = builder.comment("Whitelist mode")
+					.define("whitelistmode", false);
+			this.list = builder.comment("Item blacklist")
+					.define("blacklist", Arrays.asList(
+							"minecraft:wooden_sword",
+							"minecraft:wooden_shovel",
+							"minecraft:wooden_pickaxe",
+							"minecraft:wooden_axe",
+							"minecraft:wooden_hoe",
+							"minecraft:stone_sword",
+							"minecraft:stone_shovel",
+							"minecraft:stone_pickaxe",
+							"minecraft:stone_axe",
+							"minecraft:stone_hoe"));
+
+			builder.pop();
+		}
+	}
+
 	public Screen buildClothConfig(final Screen parent) {
 		final ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle("savetools.config.title");
 		final ConfigEntryBuilder entry = builder.getEntryBuilder();
 
-		final ConfigCategory general = builder.getOrCreateCategory("general");
+		final ConfigCategory general = builder.getOrCreateCategory("savetools.config.category.general");
 		general.addEntry(entry.startModifierKeyCodeField("savetools.key.toggle", ModifierKeyCode.of(InputHandler.KEY_TOGGLE.getKey(), toClothModifier(InputHandler.KEY_TOGGLE.getKeyModifier())))
 				.setDefaultValue(InputHandler.KEY_TOGGLE.getDefault())
 				.setSaveConsumer(InputHandler.KEY_TOGGLE::bind)
@@ -78,6 +115,39 @@ public class Config {
 				.setDefaultValue(false)
 				.setSaveConsumer(this.general.onlyEnchanted::set)
 				.build());
+
+		final ConfigCategory advanced = builder.getOrCreateCategory("savetools.config.category.advanced");
+		advanced.addEntry(entry.startBooleanToggle("savetools.config.enablelistfilter", this.advanced.enableListFiler.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.advanced.enableListFiler::set)
+				.build());
+		advanced.addEntry(entry.startTextDescription(I18n.format("savetools.config.description.advanced1")).build());
+		advanced.addEntry(entry.startTextDescription(I18n.format("savetools.config.description.advanced2")).build());
+		advanced.addEntry(entry.startBooleanToggle("savetools.config.whitelistmode", this.advanced.whitelistMode.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.advanced.whitelistMode::set)
+				.build());
+		advanced.addEntry(entry.startStrList("savetools.config.blacklist.title", this.advanced.list.get())
+				.setDefaultValue(() -> Arrays.asList(
+						"minecraft:wooden_sword",
+						"minecraft:wooden_shovel",
+						"minecraft:wooden_pickaxe",
+						"minecraft:wooden_axe",
+						"minecraft:wooden_hoe",
+						"minecraft:stone_sword",
+						"minecraft:stone_shovel",
+						"minecraft:stone_pickaxe",
+						"minecraft:stone_axe",
+						"minecraft:stone_hoe"))
+				.setSaveConsumer(this.advanced.list::set)
+				.build());
+
+		//			ForgeRegistries.ITEMS.getValues().stream().filter(Item::isDamageable).map(item -> {
+		//		final ResourceLocation location = item.getRegistryName();
+		//		if (location==null)
+		//			return item.toString();
+		//		return location.toString();
+		//	}).collect(Collectors.toList());
 
 		return builder.setSavingRunnable(this.config::save).build();
 	}
