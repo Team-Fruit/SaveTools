@@ -167,13 +167,13 @@ public class Config {
 
 		final ConfigCategory advanced = builder.getOrCreateCategory("savetools.config.category.advanced");
 		advanced.addEntry(entry.startBooleanToggle("savetools.config.enablelistfilter", this.advanced.enableListFiler.get())
-				.setDefaultValue(true)
+				.setDefaultValue(false)
 				.setSaveConsumer(this.advanced.enableListFiler::set)
 				.build());
 		advanced.addEntry(entry.startTextDescription(I18n.format("savetools.config.description.advanced1")).build());
 		advanced.addEntry(entry.startTextDescription(I18n.format("savetools.config.description.advanced2")).build());
 		advanced.addEntry(entry.startBooleanToggle("savetools.config.whitelistmode", this.advanced.whitelistMode.get())
-				.setDefaultValue(true)
+				.setDefaultValue(false)
 				.setSaveConsumer(this.advanced.whitelistMode::set)
 				.build());
 		advanced.addEntry(entry.startStrList("savetools.config.blacklist.title", this.advanced.list.get())
