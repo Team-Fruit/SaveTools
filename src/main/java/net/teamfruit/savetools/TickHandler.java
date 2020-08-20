@@ -84,17 +84,27 @@ public class TickHandler {
 		if (!save)
 			return;
 
-		if (Config.INSTANCE.advanced.enableListFiler.get()) {
-			final String name = Optional.ofNullable(item.getItem().getRegistryName())
-					.map(ResourceLocation::toString)
-					.orElseGet(() -> item.getItem().toString());
+		final String name = Optional.ofNullable(item.getItem().getRegistryName())
+				.map(ResourceLocation::toString)
+				.orElseGet(() -> item.getItem().toString());
 
+		if (Config.INSTANCE.advanced.enableListFiler.get())
 			if (Config.INSTANCE.advanced.whitelistMode.get()) {
 				if (Config.INSTANCE.advanced.list.get().stream().noneMatch(name::equals))
 					return;
 			} else if (Config.INSTANCE.advanced.list.get().stream().anyMatch(name::equals))
 				return;
-		}
+
+		if (!Config.INSTANCE.material.wood.get()&&name.startsWith("minecraft:wooden_"))
+			return;
+		if (!Config.INSTANCE.material.stone.get()&&name.startsWith("minecraft:stone_"))
+			return;
+		if (!Config.INSTANCE.material.iron.get()&&name.startsWith("minecraft:iron_"))
+			return;
+		if (!Config.INSTANCE.material.gold.get()&&name.startsWith("minecraft:golden_"))
+			return;
+		if (!Config.INSTANCE.material.diamond.get()&&name.startsWith("minecraft:diamond_"))
+			return;
 
 		if (attack) {
 			final RayTraceResult rayTrace = mc.objectMouseOver;

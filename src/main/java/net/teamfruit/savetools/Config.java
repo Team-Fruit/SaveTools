@@ -22,12 +22,14 @@ public class Config {
 
 	public final ForgeConfigSpec config;
 	public final General general;
+	public final Material material;
 	public final Advanced advanced;
 
 	private Config() {
 		final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		this.general = new General(builder);
 		this.advanced = new Advanced(builder);
+		this.material = new Material(builder);
 		this.config = builder.build();
 	}
 
@@ -49,6 +51,31 @@ public class Config {
 					.define("use", true);
 			this.onlyEnchanted = builder.comment("Save only the enchanted tools")
 					.define("onlyenchanted", false);
+
+			builder.pop();
+		}
+	}
+
+	public static class Material {
+		public final BooleanValue wood;
+		public final BooleanValue stone;
+		public final BooleanValue iron;
+		public final BooleanValue gold;
+		public final BooleanValue diamond;
+
+		public Material(final ForgeConfigSpec.Builder builder) {
+			builder.push("Material");
+
+			this.wood = builder.comment("Wooden tools")
+					.define("wood", true);
+			this.stone = builder.comment("Stone tools")
+					.define("stone", true);
+			this.iron = builder.comment("Iron tools")
+					.define("iron", true);
+			this.gold = builder.comment("Golden tools")
+					.define("gold", true);
+			this.diamond = builder.comment("Diamond tools")
+					.define("diamond", true);
 
 			builder.pop();
 		}
@@ -114,6 +141,28 @@ public class Config {
 		general.addEntry(entry.startBooleanToggle("savetools.config.onlyenchanted.title", this.general.onlyEnchanted.get())
 				.setDefaultValue(false)
 				.setSaveConsumer(this.general.onlyEnchanted::set)
+				.build());
+
+		final ConfigCategory material = builder.getOrCreateCategory("savetools.config.category.material");
+		material.addEntry(entry.startBooleanToggle("savetools.config.wood", this.material.wood.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.wood::set)
+				.build());
+		material.addEntry(entry.startBooleanToggle("savetools.config.stone", this.material.stone.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.stone::set)
+				.build());
+		material.addEntry(entry.startBooleanToggle("savetools.config.iron", this.material.iron.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.iron::set)
+				.build());
+		material.addEntry(entry.startBooleanToggle("savetools.config.gold", this.material.gold.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.gold::set)
+				.build());
+		material.addEntry(entry.startBooleanToggle("savetools.config.diamond", this.material.diamond.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.diamond::set)
 				.build());
 
 		final ConfigCategory advanced = builder.getOrCreateCategory("savetools.config.category.advanced");
