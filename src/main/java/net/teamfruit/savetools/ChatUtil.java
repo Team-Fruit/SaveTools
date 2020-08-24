@@ -16,7 +16,7 @@ public class ChatUtil {
 			return;
 
 		final ITextComponent base = new StringTextComponent("[")
-				.appendSibling(new TranslationTextComponent("savetools.message.savetools").setStyle(new Style().setColor(TextFormatting.AQUA).setBold(true)))
+				.appendSibling(new TranslationTextComponent("message.savetools.savetools").setStyle(new Style().setColor(TextFormatting.AQUA).setBold(true)))
 				.appendText("] ");
 		player.sendMessage(base.appendSibling(text));
 	}

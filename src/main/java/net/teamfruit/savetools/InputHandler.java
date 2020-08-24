@@ -16,8 +16,8 @@ public class InputHandler {
 
 	public static final InputHandler INSTANCE = new InputHandler();
 
-	public static final KeyBinding KEY_TOGGLE = new KeyBinding("savetools.key.toggle", GLFW.GLFW_KEY_B, "savetools.key.category");
-	public static final KeyBinding KEY_CONFIG = new KeyBinding("savetools.key.config", GLFW.GLFW_KEY_UNKNOWN, "savetools.key.category");
+	public static final KeyBinding KEY_TOGGLE = new KeyBinding("key.savetools.toggle", GLFW.GLFW_KEY_B, "key.savetools.category");
+	public static final KeyBinding KEY_CONFIG = new KeyBinding("key.savetools.config", GLFW.GLFW_KEY_UNKNOWN, "key.savetools.category");
 
 	private boolean enabled = true;
 	private boolean autoEnable = true;
@@ -55,12 +55,12 @@ public class InputHandler {
 
 	public void enable() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	private void enableAuto() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 	public void disable(final boolean autoEnable) {
@@ -71,10 +71,10 @@ public class InputHandler {
 			this.autoEnable = true;
 			this.slot = player.inventory.currentItem;
 			this.item = player.getHeldItemMainhand();
-			ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.disabled.temporary").setStyle(new Style().setColor(TextFormatting.RED)));
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.temporary").setStyle(new Style().setColor(TextFormatting.RED)));
 		} else {
 			this.autoEnable = false;
-			ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.disabled.while").setStyle(new Style().setColor(TextFormatting.RED)));
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.while").setStyle(new Style().setColor(TextFormatting.RED)));
 		}
 	}
 

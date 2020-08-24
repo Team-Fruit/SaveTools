@@ -199,7 +199,7 @@ public class TickHandler {
 	}
 
 	private void sendSaveMessage() {
-		ChatUtil.saveToolsMessage(new TranslationTextComponent("savetools.message.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.saved").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 	}
 
 }
