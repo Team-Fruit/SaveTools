@@ -38,6 +38,10 @@ public class Config {
 		public final BooleanValue attack;
 		public final BooleanValue use;
 		public final BooleanValue onlyEnchanted;
+		public final BooleanValue useAbsolute;
+		public final ConfigValue<Integer> absoluteThreshold;
+		public final BooleanValue usePercentage;
+		public final ConfigValue<Integer> percentageThreshold;
 
 		public General(final ForgeConfigSpec.Builder builder) {
 			builder.push("General");
@@ -51,6 +55,14 @@ public class Config {
 					.define("use", true);
 			this.onlyEnchanted = builder.comment("Save only the enchanted tools")
 					.define("onlyenchanted", false);
+			this.useAbsolute = builder.comment("Use absolute value threshold")
+					.define("useabsolute", true);
+			this.absoluteThreshold = builder.comment("Absolute threshold")
+					.define("absolutethreshold", 2);
+			this.usePercentage = builder.comment("Use percentage value threshold")
+					.define("usepercentage", true);
+			this.percentageThreshold = builder.comment("Percentage threshold")
+					.define("percentagethreshold", 1);
 
 			builder.pop();
 		}
@@ -141,6 +153,23 @@ public class Config {
 		general.addEntry(entry.startBooleanToggle("savetools.config.onlyenchanted.title", this.general.onlyEnchanted.get())
 				.setDefaultValue(false)
 				.setSaveConsumer(this.general.onlyEnchanted::set)
+				.build());
+		general.addEntry(entry.startBooleanToggle("savetools.config.useabsolute.title", this.general.useAbsolute.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.general.useAbsolute::set)
+				.build());
+		general.addEntry(entry.startIntField("savetools.config.absolutethreshold.title", this.general.absoluteThreshold.get())
+				.setDefaultValue(2)
+				.setSaveConsumer(this.general.absoluteThreshold::set)
+				.build());
+		general.addEntry(entry.startBooleanToggle("savetools.config.usepercentage.title", this.general.usePercentage.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.general.usePercentage::set)
+				.build());
+		general.addEntry(entry.startIntSlider("savetools.config.percentagethreshold.title", this.general.percentageThreshold.get(), 0, 100)
+				.setDefaultValue(1)
+				.setTextGetter((i) -> i+" %")
+				.setSaveConsumer(this.general.percentageThreshold::set)
 				.build());
 
 		final ConfigCategory material = builder.getOrCreateCategory("savetools.config.category.material");

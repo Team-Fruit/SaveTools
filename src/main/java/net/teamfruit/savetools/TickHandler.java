@@ -79,7 +79,10 @@ public class TickHandler {
 			return;
 
 		final int remaiming = item.getMaxDamage()-item.getDamage();
-		final boolean save = remaiming<=item.getMaxDamage()/100f||remaiming<=2;
+		final boolean save = Config.INSTANCE.general.usePercentage.get()&&
+				remaiming<=item.getMaxDamage()*(Config.INSTANCE.general.percentageThreshold.get()/100f)||
+				Config.INSTANCE.general.useAbsolute.get()&&
+						remaiming<=Config.INSTANCE.general.absoluteThreshold.get();
 
 		if (!save)
 			return;
