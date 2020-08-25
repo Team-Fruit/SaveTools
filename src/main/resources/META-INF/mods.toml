@@ -12,6 +12,13 @@ description='''
 This mod protects your preciousfully tools/weapons from breaking via over use!!
 '''
 
+[[dependencies.savetools]]
+    modId="cloth-config2"
+    mandatory=true
+    versionRange="[3.0,)"
+    ordering="NONE"
+    side="CLIENT"
+
 [[dependencies.savetools]] #optional
     modId="forge"
     mandatory=true
