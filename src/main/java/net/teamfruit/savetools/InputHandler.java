@@ -55,12 +55,12 @@ public class InputHandler {
 
 	public void enable() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.manually").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.manually").func_230530_a_(Style.field_240709_b_.func_240712_a_(TextFormatting.YELLOW)));
 	}
 
 	private void enableAuto() {
 		this.enabled = true;
-		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.auto").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.enabled.auto").func_230530_a_(Style.field_240709_b_.func_240712_a_(TextFormatting.YELLOW)));
 	}
 
 	public void disable(final boolean autoEnable) {
@@ -71,10 +71,10 @@ public class InputHandler {
 			this.autoEnable = true;
 			this.slot = player.inventory.currentItem;
 			this.item = player.getHeldItemMainhand();
-			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.temporary").setStyle(new Style().setColor(TextFormatting.RED)));
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.temporary").func_230530_a_(Style.field_240709_b_.func_240712_a_(TextFormatting.RED)));
 		} else {
 			this.autoEnable = false;
-			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.while").setStyle(new Style().setColor(TextFormatting.RED)));
+			ChatUtil.saveToolsMessage(new TranslationTextComponent("message.savetools.disabled.while").func_230530_a_(Style.field_240709_b_.func_240712_a_(TextFormatting.RED)));
 		}
 	}
 

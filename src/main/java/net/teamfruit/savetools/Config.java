@@ -3,13 +3,14 @@ package net.teamfruit.savetools;
 import java.util.Arrays;
 import java.util.List;
 
-import me.shedaniel.forge.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.forge.clothconfig2.api.ConfigCategory;
-import me.shedaniel.forge.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.forge.clothconfig2.api.Modifier;
-import me.shedaniel.forge.clothconfig2.api.ModifierKeyCode;
+import me.shedaniel.clothconfig2.forge.api.ConfigBuilder;
+import me.shedaniel.clothconfig2.forge.api.ConfigCategory;
+import me.shedaniel.clothconfig2.forge.api.ConfigEntryBuilder;
+import me.shedaniel.clothconfig2.forge.api.Modifier;
+import me.shedaniel.clothconfig2.forge.api.ModifierKeyCode;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
@@ -125,89 +126,89 @@ public class Config {
 	}
 
 	public Screen buildClothConfig(final Screen parent) {
-		final ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle("config.savetools.title");
-		final ConfigEntryBuilder entry = builder.getEntryBuilder();
+		final ConfigBuilder builder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslationTextComponent("config.savetools.title"));
+		final ConfigEntryBuilder entry = builder.entryBuilder();
 
-		final ConfigCategory general = builder.getOrCreateCategory("config.savetools.category.general");
-		general.addEntry(entry.startModifierKeyCodeField("key.savetools.toggle", ModifierKeyCode.of(InputHandler.KEY_TOGGLE.getKey(), toClothModifier(InputHandler.KEY_TOGGLE.getKeyModifier())))
+		final ConfigCategory general = builder.getOrCreateCategory(new TranslationTextComponent("config.savetools.category.general"));
+		general.addEntry(entry.startModifierKeyCodeField(new TranslationTextComponent("key.savetools.toggle"), ModifierKeyCode.of(InputHandler.KEY_TOGGLE.getKey(), toClothModifier(InputHandler.KEY_TOGGLE.getKeyModifier())))
 				.setDefaultValue(InputHandler.KEY_TOGGLE.getDefault())
 				.setSaveConsumer(InputHandler.KEY_TOGGLE::bind)
 				.setModifierSaveConsumer(mod -> InputHandler.KEY_TOGGLE.setKeyModifierAndCode(toForgeModifier(mod.getModifier()), mod.getKeyCode()))
 				.build());
-		general.addEntry(entry.startModifierKeyCodeField("key.savetools.config", ModifierKeyCode.of(InputHandler.KEY_CONFIG.getKey(), toClothModifier(InputHandler.KEY_CONFIG.getKeyModifier())))
+		general.addEntry(entry.startModifierKeyCodeField(new TranslationTextComponent("key.savetools.config"), ModifierKeyCode.of(InputHandler.KEY_CONFIG.getKey(), toClothModifier(InputHandler.KEY_CONFIG.getKeyModifier())))
 				.setDefaultValue(InputHandler.KEY_CONFIG.getDefault())
 				.setSaveConsumer(InputHandler.KEY_CONFIG::bind)
 				.setModifierSaveConsumer(mod -> InputHandler.KEY_CONFIG.setKeyModifierAndCode(toForgeModifier(mod.getModifier()), mod.getKeyCode()))
 				.build());
-		general.addEntry(entry.startIntSlider("config.savetools.interval.title", this.general.interval.get(), 0, 20)
+		general.addEntry(entry.startIntSlider(new TranslationTextComponent("config.savetools.interval.title"), this.general.interval.get(), 0, 20)
 				.setDefaultValue(0)
-				.setTextGetter((i) -> i+" tick")
+				.setTextGetter((i) -> new StringTextComponent(i+" tick"))
 				.setSaveConsumer(this.general.interval::set)
 				.build());
-		general.addEntry(entry.startBooleanToggle("config.savetools.attack.title", this.general.attack.get())
+		general.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.attack.title"), this.general.attack.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.general.attack::set)
 				.build());
-		general.addEntry(entry.startBooleanToggle("config.savetools.use.title", this.general.use.get())
+		general.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.use.title"), this.general.use.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.general.use::set)
 				.build());
-		general.addEntry(entry.startBooleanToggle("config.savetools.onlyenchanted.title", this.general.onlyEnchanted.get())
+		general.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.onlyenchanted.title"), this.general.onlyEnchanted.get())
 				.setDefaultValue(false)
 				.setSaveConsumer(this.general.onlyEnchanted::set)
 				.build());
-		general.addEntry(entry.startBooleanToggle("config.savetools.useabsolute.title", this.general.useAbsolute.get())
+		general.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.useabsolute.title"), this.general.useAbsolute.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.general.useAbsolute::set)
 				.build());
-		general.addEntry(entry.startIntField("config.savetools.absolutethreshold.title", this.general.absoluteThreshold.get())
+		general.addEntry(entry.startIntField(new TranslationTextComponent("config.savetools.absolutethreshold.title"), this.general.absoluteThreshold.get())
 				.setDefaultValue(2)
 				.setSaveConsumer(this.general.absoluteThreshold::set)
 				.build());
-		general.addEntry(entry.startBooleanToggle("config.savetools.usepercentage.title", this.general.usePercentage.get())
+		general.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.usepercentage.title"), this.general.usePercentage.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.general.usePercentage::set)
 				.build());
-		general.addEntry(entry.startIntSlider("config.savetools.percentagethreshold.title", this.general.percentageThreshold.get(), 0, 100)
+		general.addEntry(entry.startIntSlider(new TranslationTextComponent("config.savetools.percentagethreshold.title"), this.general.percentageThreshold.get(), 0, 100)
 				.setDefaultValue(1)
-				.setTextGetter((i) -> i+" %")
+				.setTextGetter((i) -> new StringTextComponent(i+" %"))
 				.setSaveConsumer(this.general.percentageThreshold::set)
 				.build());
 
-		final ConfigCategory material = builder.getOrCreateCategory("config.savetools.category.material");
-		material.addEntry(entry.startBooleanToggle("config.savetools.wood", this.material.wood.get())
+		final ConfigCategory material = builder.getOrCreateCategory(new TranslationTextComponent("config.savetools.category.material"));
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.wood"), this.material.wood.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.wood::set)
 				.build());
-		material.addEntry(entry.startBooleanToggle("config.savetools.stone", this.material.stone.get())
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.stone"), this.material.stone.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.stone::set)
 				.build());
-		material.addEntry(entry.startBooleanToggle("config.savetools.iron", this.material.iron.get())
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.iron"), this.material.iron.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.iron::set)
 				.build());
-		material.addEntry(entry.startBooleanToggle("config.savetools.gold", this.material.gold.get())
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.gold"), this.material.gold.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.gold::set)
 				.build());
-		material.addEntry(entry.startBooleanToggle("config.savetools.diamond", this.material.diamond.get())
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.diamond"), this.material.diamond.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.diamond::set)
 				.build());
 
-		final ConfigCategory advanced = builder.getOrCreateCategory("config.savetools.category.advanced");
-		advanced.addEntry(entry.startBooleanToggle("config.savetools.enablelistfilter.title", this.advanced.enableListFiler.get())
+		final ConfigCategory advanced = builder.getOrCreateCategory(new TranslationTextComponent("config.savetools.category.advanced"));
+		advanced.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.enablelistfilter.title"), this.advanced.enableListFiler.get())
 				.setDefaultValue(false)
 				.setSaveConsumer(this.advanced.enableListFiler::set)
 				.build());
-		advanced.addEntry(entry.startTextDescription(I18n.format("config.savetools.advanced.description1")).build());
-		advanced.addEntry(entry.startTextDescription(I18n.format("config.savetools.advanced.description2")).build());
-		advanced.addEntry(entry.startBooleanToggle("config.savetools.whitelistmode.title", this.advanced.whitelistMode.get())
+		advanced.addEntry(entry.startTextDescription(new TranslationTextComponent("config.savetools.advanced.description1")).build());
+		advanced.addEntry(entry.startTextDescription(new TranslationTextComponent("config.savetools.advanced.description2")).build());
+		advanced.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.whitelistmode.title"), this.advanced.whitelistMode.get())
 				.setDefaultValue(false)
 				.setSaveConsumer(this.advanced.whitelistMode::set)
 				.build());
-		advanced.addEntry(entry.startStrList("config.savetools.blacklist.title", this.advanced.list.get())
+		advanced.addEntry(entry.startStrList(new TranslationTextComponent("config.savetools.blacklist.title"), this.advanced.list.get())
 				.setDefaultValue(Advanced.DEFAULT_LIST)
 				.setSaveConsumer(this.advanced.list::set)
 				.build());

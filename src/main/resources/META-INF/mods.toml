@@ -1,5 +1,6 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[33,)"
+license="MIT License"
 issueTrackerURL="https://github.com/Team-Fruit/SaveTools/issues"
 
 [[mods]]
@@ -13,22 +14,22 @@ This mod protects your preciousfully tools/weapons from breaking via over use!!
 '''
 
 [[dependencies.savetools]]
-    modId="cloth-config2"
+    modId="cloth-config"
     mandatory=true
-    versionRange="[3.0,)"
+    versionRange="[4,)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.savetools]] #optional
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[33,)"
     ordering="NONE"
     side="CLIENT"
 
 [[dependencies.savetools]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.2]"
     ordering="NONE"
     side="CLIENT"
