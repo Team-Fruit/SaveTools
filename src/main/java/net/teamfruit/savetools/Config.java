@@ -94,6 +94,18 @@ public class Config {
 	}
 
 	public static class Advanced {
+		public static final List<String> DEFAULT_LIST = Arrays.asList(
+				"minecraft:wooden_sword",
+				"minecraft:wooden_shovel",
+				"minecraft:wooden_pickaxe",
+				"minecraft:wooden_axe",
+				"minecraft:wooden_hoe",
+				"minecraft:stone_sword",
+				"minecraft:stone_shovel",
+				"minecraft:stone_pickaxe",
+				"minecraft:stone_axe",
+				"minecraft:stone_hoe");
+
 		public final BooleanValue enableListFiler;
 		public final BooleanValue whitelistMode;
 		public final ConfigValue<List<String>> list;
@@ -106,17 +118,7 @@ public class Config {
 			this.whitelistMode = builder.comment("Whitelist mode")
 					.define("whitelistmode", false);
 			this.list = builder.comment("Item blacklist")
-					.define("blacklist", Arrays.asList(
-							"minecraft:wooden_sword",
-							"minecraft:wooden_shovel",
-							"minecraft:wooden_pickaxe",
-							"minecraft:wooden_axe",
-							"minecraft:wooden_hoe",
-							"minecraft:stone_sword",
-							"minecraft:stone_shovel",
-							"minecraft:stone_pickaxe",
-							"minecraft:stone_axe",
-							"minecraft:stone_hoe"));
+					.define("blacklist", DEFAULT_LIST);
 
 			builder.pop();
 		}
@@ -206,17 +208,7 @@ public class Config {
 				.setSaveConsumer(this.advanced.whitelistMode::set)
 				.build());
 		advanced.addEntry(entry.startStrList("config.savetools.blacklist.title", this.advanced.list.get())
-				.setDefaultValue(() -> Arrays.asList(
-						"minecraft:wooden_sword",
-						"minecraft:wooden_shovel",
-						"minecraft:wooden_pickaxe",
-						"minecraft:wooden_axe",
-						"minecraft:wooden_hoe",
-						"minecraft:stone_sword",
-						"minecraft:stone_shovel",
-						"minecraft:stone_pickaxe",
-						"minecraft:stone_axe",
-						"minecraft:stone_hoe"))
+				.setDefaultValue(Advanced.DEFAULT_LIST)
 				.setSaveConsumer(this.advanced.list::set)
 				.build());
 
