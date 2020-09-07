@@ -27,6 +27,7 @@
 	"config.savetools.iron": "鉄",
 	"config.savetools.gold": "金",
 	"config.savetools.diamond": "ダイヤモンド",
+	"config.savetools.netherite": "ネザライト",
 	"config.savetools.enablelistfilter.title": "フィルターを有効化",
 	"config.savetools.whitelistmode.title": "ホワイトリストモード",
 	"config.savetools.blacklist.title": "アイテム一覧"

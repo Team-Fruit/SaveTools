@@ -75,6 +75,7 @@ public class Config {
 		public final BooleanValue iron;
 		public final BooleanValue gold;
 		public final BooleanValue diamond;
+		public final BooleanValue netherite;
 
 		public Material(final ForgeConfigSpec.Builder builder) {
 			builder.push("Material");
@@ -89,6 +90,8 @@ public class Config {
 					.define("gold", true);
 			this.diamond = builder.comment("Diamond tools")
 					.define("diamond", true);
+			this.netherite = builder.comment("Netherite tools")
+					.define("netherite", true);
 
 			builder.pop();
 		}
@@ -195,6 +198,10 @@ public class Config {
 		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.diamond"), this.material.diamond.get())
 				.setDefaultValue(true)
 				.setSaveConsumer(this.material.diamond::set)
+				.build());
+		material.addEntry(entry.startBooleanToggle(new TranslationTextComponent("config.savetools.netherite"), this.material.netherite.get())
+				.setDefaultValue(true)
+				.setSaveConsumer(this.material.netherite::set)
 				.build());
 
 		final ConfigCategory advanced = builder.getOrCreateCategory(new TranslationTextComponent("config.savetools.category.advanced"));

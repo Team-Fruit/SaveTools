@@ -27,6 +27,7 @@
 	"config.savetools.iron": "Iron",
 	"config.savetools.gold": "Golden",
 	"config.savetools.diamond": "Diamond",
+	"config.savetools.netherite": "Netherite",
 	"config.savetools.enablelistfilter.title": "Enable Filtering",
 	"config.savetools.whitelistmode.title": "Whitelist Mode",
 	"config.savetools.blacklist.title": "Item List"

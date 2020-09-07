@@ -108,6 +108,8 @@ public class TickHandler {
 			return;
 		if (!Config.INSTANCE.material.diamond.get()&&name.startsWith("minecraft:diamond_"))
 			return;
+		if (!Config.INSTANCE.material.netherite.get()&&name.startsWith("minecraft:netherite_"))
+			return;
 
 		if (attack) {
 			final RayTraceResult rayTrace = mc.objectMouseOver;
