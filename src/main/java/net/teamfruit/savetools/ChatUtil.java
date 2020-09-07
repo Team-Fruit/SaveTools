@@ -18,7 +18,7 @@ public class ChatUtil {
 
 		final IFormattableTextComponent base = new StringTextComponent("[")
 				.func_230529_a_(new TranslationTextComponent("message.savetools.savetools").func_230530_a_(Style.field_240709_b_.func_240720_a_(TextFormatting.AQUA, TextFormatting.BOLD)))
-				.func_230529_a_(new StringTextComponent("]"));
+				.func_230529_a_(new StringTextComponent("] "));
 		// UUID unused
 		player.sendMessage(base.func_230529_a_(text), null);
 	}
